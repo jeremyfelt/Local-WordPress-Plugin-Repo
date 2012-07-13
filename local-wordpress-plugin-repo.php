@@ -227,15 +227,19 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 				if ( isset( $plugin_forum_data[ $true_subject ] ) )
 					$plugin_forum_data[ $true_subject ]['count']++;
 				else
-					$plugin_forum_data[ $true_subject ] = array( 'count' => 1, 'last_author' => $author_name, 'subject' => $true_subject, 'last_date' => strtotime( $item->get_date() ), 'link' => $item->get_link() );
-
+					$plugin_forum_data[ $true_subject ] = array(
+						'count' => 1,
+						'last_author' => $author_name,
+						'subject' => $true_subject,
+						'last_date' => strtotime( $item->get_date() ),
+						'link' => $item->get_link()
+					);
 			}
 
 		}
 
 		if ( ! empty( $plugin_forum_data ) )
 			update_post_meta( $post_id, '_fog_lpr_support_feed_data', $plugin_forum_data );
-
 	}
 }
 new Local_WordPress_Plugin_Repo_Foghlaim();
