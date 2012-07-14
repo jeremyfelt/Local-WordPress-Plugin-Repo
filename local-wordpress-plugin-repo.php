@@ -38,6 +38,7 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 	public function __construct() {
 		add_action( 'init', array( $this, 'create_content_type' ) );
 		add_action( 'after_setup_theme', array( $this, 'event_scheduler' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_style' ) );
 		add_action( 'fog_lpr_plugin_api_check', array( $this, 'check_plugin_api' ) );
 		add_action( 'save_post', array( $this, 'save_meta_data' ), 10, 2 );
 		add_action( 'save_post', array( $this, 'get_plugin_stats' ), 20, 2 );
@@ -81,6 +82,11 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 	public function event_scheduler() {
 		if ( ! wp_next_scheduled( 'fog_lpr_plugin_api_check' ) )
 			wp_schedule_event( time() + 600, 'twicedaily', 'fog_lpr_plugin_api_check' );
+	}
+
+	public function enqueue_admin_style() {
+		if ( is_admin() )
+			wp_enqueue_style( 'fog_lpr_admin', plugins_url( 'css/admin-style.css', __FILE__ ) );
 	}
 
 	function check_plugin_api() {
@@ -146,7 +152,7 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 		foreach ( $plugin_forum_data as $data ) {
 			$current_support_feed_html .= '
 						<div class="fog-support-feed-item">
-							<div class="fog-support-feed-item-date">' . esc_html( $data[ 'last_date' ] ) . '</div>
+							<div class="fog-support-feed-item-date">' . date( 'm/d/y H:i', $data[ 'last_date' ] ) . '</div>
 							<div class="fog-support-feed-item-title"><a href="' . esc_url( $data[ 'link' ] ) . '">' . esc_html( $data[ 'subject' ] ) . '</a></div>
 							<div class="fog-support-feed-item-author">' . esc_html( $data[ 'last_author' ] ) . '</div>
 							<div class="fog-support-feed-item-count">' . esc_html( $data[ 'count' ] ) . ' messages</div>
