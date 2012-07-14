@@ -172,13 +172,24 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 		if ( 'auto-draft' == $post->post_status )
 			return NULL;
 
+		global $allowedposttags;
+		$fog_lpr_allowedposttags = $allowedposttags;
+		$fog_lpr_allowedposttags['input'] = array(
+			'type'   => true,
+			'name'   => true,
+			'value'  => true,
+			'border' => true,
+			'src'    => true,
+			'alt'    => true
+		);
+
 		if ( isset( $_POST['plugin_slug_input'] ) && '' != $_POST['plugin_slug_input'] )
 			update_post_meta( $post_id, '_fog_lpr_plugin_slug', sanitize_title( $_POST['plugin_slug_input'] ) );
 		else
 			delete_post_meta( $post_id, '_fog_lpr_plugin_slug' );
 
 		if ( isset( $_POST['plugin_donate_code'] ) && '' != $_POST['plugin_donate_code'] )
-			update_post_meta( $post_id, '_fog_lpr_plugin_donate_code', $_POST['plugin_donate_code'] );
+			update_post_meta( $post_id, '_fog_lpr_plugin_donate_code', wp_kses( $_POST['plugin_donate_code'], $fog_lpr_allowedposttags ) );
 		else
 			delete_post_meta( $post_id, '_fog_lpr_plugin_donate_code' );
 	}
