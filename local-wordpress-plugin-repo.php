@@ -111,19 +111,32 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 		register_post_type( self::post_type, $content_type_arguments );
 	}
 
+	/**
+	 * Schedule a twice daily event to check the plugin API if an event has not yet been
+	 * scheduled.
+	 */
 	public function event_scheduler() {
 		if ( ! wp_next_scheduled( 'fog_lpr_plugin_api_check' ) )
 			wp_schedule_event( time() + 600, 'twicedaily', 'fog_lpr_plugin_api_check' );
 	}
 
+	/**
+	 * Add an admin stylesheet
+	 *
+	 * @todo enqueue this only on the page we need it
+	 */
 	public function enqueue_admin_style() {
 		if ( is_admin() )
 			wp_enqueue_style( 'fog_lpr_admin', plugins_url( 'css/admin-style.css', __FILE__ ) );
 	}
 
+	/**
+	 * Twice a day, check the plugin API and the plugin support feed to look for updated
+	 * info about each of our plugins, up to 50.
+	 */
 	function check_plugin_api() {
 		$plugin_posts = new WP_Query( array(
-		                                   'posts_per_page' => 25,
+		                                   'posts_per_page' => 50,
 		                                   'post_type' => self::post_type,
 		                                   'no_found_rows' => true,
 		                              ));
@@ -138,6 +151,11 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 		wp_reset_postdata();
 	}
 
+	/**
+	 * Add the meta boxes used in the admin dashboard the plugin.
+	 *
+	 * @param $post object containing WP_Post data
+	 */
 	function register_meta_boxes( $post ) {
 		add_meta_box( 'fog_lpr_plugin_slug', 'Plugin Slug', array( $this, 'display_plugin_slug_meta_box' ), $post->post_type, 'side', 'default' );
 		add_meta_box( 'fog_lpr_donate_code', 'Plugin Donation Code', array( $this, 'display_plugin_donation_meta_box' ), $post->post_type, 'normal', 'default' );
