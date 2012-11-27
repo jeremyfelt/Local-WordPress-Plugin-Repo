@@ -201,7 +201,7 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 	 * code that can be accessed on the front end via the meta key.
 	 *
 	 * @todo - add a getter that will provide this information easily
-	 * 
+	 *
 	 * @param $post object containing WP_Post data
 	 */
 	function display_plugin_donation_meta_box( $post ) {
@@ -213,6 +213,14 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 		<?php
 	}
 
+	/**
+	 * Display the meta box in each plugin post screen that displays the support
+	 * forum data about the plugin.
+	 *
+	 * @todo - add a getter tha will provide this information easily
+	 * 
+	 * @param $post object containing WP_Post data
+	 */
 	function display_plugin_support_feed_meta_box( $post ) {
 		$plugin_forum_data = get_post_meta( $post->ID, '_fog_lpr_support_feed_data', true );
 
