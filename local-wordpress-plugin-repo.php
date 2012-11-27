@@ -29,11 +29,8 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 
 	/**
 	 * Post type slug to use for storing plugin information from the repo
-	 *
-	 * @access public
-	 * @var string
 	 */
-	var $post_type = 'fog_lpr_plugin';
+	const post_type = 'fog_lpr_plugin';
 
 	/**
 	 * Contains the only instance we want.
@@ -68,7 +65,7 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 	}
 
 	public function create_content_type() {
-		register_post_type( $this->post_type,
+		register_post_type( self::post_type,
 			array(
 			     'labels' => array(
 				     'name' => 'WordPress Plugins',
@@ -114,7 +111,7 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 	function check_plugin_api() {
 		$plugin_posts = new WP_Query( array(
 		                                   'posts_per_page' => 25,
-		                                   'post_type' => $this->post_type,
+		                                   'post_type' => self::post_type,
 		                                   'no_found_rows' => true,
 		                              ));
 
@@ -218,7 +215,7 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 
 	function get_plugin_stats( $post_id, $post = 0, $manual = false ) {
 
-		if ( ! empty( $post ) && $this->post_type != $post->post_type && ! $manual )
+		if ( ! empty( $post ) && self::post_type != $post->post_type && ! $manual )
 			return;
 
 		$current_slug = get_post_meta( $post_id, '_fog_lpr_plugin_slug', true );
@@ -251,7 +248,7 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 
 	function get_plugin_support_feed( $post_id, $post = 0, $manual = false ) {
 
-		if ( ! empty( $post ) && $this->post_type != $post->post_type && ! $manual )
+		if ( ! empty( $post ) && self::post_type != $post->post_type && ! $manual )
 			return;
 
 		$current_slug = get_post_meta( $post_id, '_fog_lpr_plugin_slug', true );
