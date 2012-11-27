@@ -132,11 +132,18 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 
 	/**
 	 * Twice a day, check the plugin API and the plugin support feed to look for updated
-	 * info about each of our plugins, up to 50.
+	 * info about each of our plugins, up to 50 by default.
+	 *
+	 * The 'lwpr_posts_per_page' filter allows you to adjust the number to anything outside
+	 * of the provided default. The chances that you're looking for 50 plugins are low, but
+	 * what do I know.
 	 */
 	function check_plugin_api() {
+
+		$posts_per_page = apply_filters( 'lwpr_posts_per_page', 50 );
+
 		$plugin_posts = new WP_Query( array(
-		                                   'posts_per_page' => 50,
+		                                   'posts_per_page' => $posts_per_page,
 		                                   'post_type' => self::post_type,
 		                                   'no_found_rows' => true,
 		                              ));
