@@ -66,8 +66,15 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 
 	/**
 	 * Register the content type used by the plugin.
+	 *
+	 * The 'lwpr_plugin_rewrite_slug' filter allows you to easily modify the path where the archive
+	 * for your WordPress plugins will appear. By default it is at wordpress/plugins. If you want to
+	 * make wider modifications to the registration of the content type, you'll need to hook in a bit
+	 * later and do so yourself.
 	 */
 	public function create_content_type() {
+
+		$rewrite_slug = apply_filters( 'lwpr_plugin_rewrite_slug', 'wordpress/plugins' );
 
 		$content_type_labels = array(
 			'name' => 'WordPress Plugins',
@@ -96,7 +103,7 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 			'register_meta_box_cb' => array( $this, 'register_meta_boxes' ),
 			'has_archive' => true,
 			'rewrite' => array(
-				'slug' => 'wordpress/plugins',
+				'slug' => $rewrite_slug,
 				'with_front' => false,
 			),
 		);
