@@ -169,6 +169,12 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 		add_meta_box( 'fog_lpr_support_feed', 'Plugin Support Feed', array( $this, 'display_plugin_support_feed_meta_box' ), $post->post_type, 'normal', 'default' );
 	}
 
+	/**
+	 * Display the meta box in each plugin post screen that displays and allows
+	 * entry for the plugin slug.
+	 *
+	 * @param $post object containing WP_Post data
+	 */
 	function display_plugin_slug_meta_box( $post ) {
 		$current_slug = get_post_meta( $post->ID, '_fog_lpr_plugin_slug', true);
 		$current_downloads = get_post_meta( $post->ID, '_fog_lpr_plugin_downloads', true );
@@ -176,17 +182,17 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 
 		wp_nonce_field( 'save-plugin-meta-data', '_fog_lpr_plugin_nonce' );
 		?>
-	<label for="plugin-slug-input">Plugin Slug:</label>
-	<input id="plugin-slug-input" name="plugin_slug_input" type="text" style="width: 200px;" placeholder="plugin-slug-data" value="<?php echo esc_attr( $current_slug ); ?>" />
-	<p class="help">Enter the slug used in the official WordPress plugin repository for your plugin.</p>
-	<?php if ( ! empty( $current_slug ) ) : ?>
-		<h4>Current Information:</h4>
-		<ul style="margin-left: 15px;">
-			<li>Repository URL: <a href="http://wordpress.org/extend/plugins/<?php echo esc_attr( $current_slug ); ?>">http://wordpress.org...plugins/<?php echo esc_attr( $current_slug ); ?></a></li>
-			<li>Support Forum: <a href="http://wordpress.org/support/plugin/<?php echo esc_attr( $current_slug ); ?>">http://wordpress.org...plugin/<?php echo esc_attr( $current_slug ); ?></a></li>
-			<li>Downloads: <?php echo esc_html( $current_downloads ); ?></li>
-			<li>Version: <?php echo esc_html( $current_version ); ?></li>
-		</ul>
+		<label for="plugin-slug-input">Plugin Slug:</label>
+		<input id="plugin-slug-input" name="plugin_slug_input" type="text" style="width: 200px;" placeholder="plugin-slug-data" value="<?php echo esc_attr( $current_slug ); ?>" />
+		<p class="help">Enter the slug used in the official WordPress plugin repository for your plugin.</p>
+		<?php if ( ! empty( $current_slug ) ) : ?>
+			<h4>Current Information:</h4>
+			<ul style="margin-left: 15px;">
+				<li>Repository URL: <a href="http://wordpress.org/extend/plugins/<?php echo esc_attr( $current_slug ); ?>">http://wordpress.org...plugins/<?php echo esc_attr( $current_slug ); ?></a></li>
+				<li>Support Forum: <a href="http://wordpress.org/support/plugin/<?php echo esc_attr( $current_slug ); ?>">http://wordpress.org...plugin/<?php echo esc_attr( $current_slug ); ?></a></li>
+				<li>Downloads: <?php echo esc_html( $current_downloads ); ?></li>
+				<li>Version: <?php echo esc_html( $current_version ); ?></li>
+			</ul>
 		<?php endif;
 	}
 
