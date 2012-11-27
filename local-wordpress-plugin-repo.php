@@ -218,7 +218,7 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 	 * forum data about the plugin.
 	 *
 	 * @todo - add a getter tha will provide this information easily
-	 * 
+	 *
 	 * @param $post object containing WP_Post data
 	 */
 	function display_plugin_support_feed_meta_box( $post ) {
@@ -241,6 +241,14 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 		echo '<div class="fog-support-feed-items">' . $current_support_feed_html . '</div>';
 	}
 
+	/**
+	 * Save the meta data attached to the custom post type whenever it is updated.
+	 *
+	 * @param $post_id int containing the current post's ID
+	 * @param $post object with WP_Post data
+	 *
+	 * @return null we do stuff in this function, not return it
+	 */
 	function save_meta_data( $post_id, $post ) {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 			return NULL;
@@ -248,7 +256,7 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 		if ( ! isset( $_POST['_fog_lpr_plugin_nonce'] ) || ! wp_verify_nonce( $_POST['_fog_lpr_plugin_nonce'], 'save-plugin-meta-data' ) )
 			return NULL;
 
-		if ( 'auto-draft' == $post->post_status )
+		if ( 'auto-draft' === $post->post_status )
 			return NULL;
 
 		global $allowedposttags;
@@ -273,6 +281,13 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 			delete_post_meta( $post_id, '_fog_lpr_plugin_donate_code' );
 	}
 
+	/**
+	 * Get the statistics for a plugin from the official plugin API
+	 *
+	 * @param      $post_id int containing current post's ID
+	 * @param int  $post object containing WP_Post data
+	 * @param bool $manual force an update through (?)
+	 */
 	function get_plugin_stats( $post_id, $post = 0, $manual = false ) {
 
 		if ( ! empty( $post ) && self::post_type != $post->post_type && ! $manual )
