@@ -317,10 +317,21 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 
 	}
 
+	/**
+	 * Modify the default cache lifetime for a SimplePie feed, which is pretty
+	 * huge by default.
+	 *
+	 * @return int representing seconds
+	 */
 	function modify_simplepie_cache_lifetime() {
 		return 600;
 	}
 
+	/**
+	 * @param      $post_id int containing current post's ID
+	 * @param int  $post object with WP_Post data
+	 * @param bool $manual force an update through (?)
+	 */
 	function get_plugin_support_feed( $post_id, $post = 0, $manual = false ) {
 
 		if ( ! empty( $post ) && self::post_type != $post->post_type && ! $manual )
