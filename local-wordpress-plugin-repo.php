@@ -35,7 +35,17 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 	 */
 	var $post_type = 'fog_lpr_plugin';
 
-	public function __construct() {
+	/**
+	 * Contains the only instance we want.
+	 *
+	 * @var Local_WordPress_Plugin_Repo_Foghlaim
+	 */
+	private static $instance;
+
+	/**
+	 * Construct the plugin by adding the appropriate hooks.
+	 */
+	private function __construct() {
 		add_action( 'init', array( $this, 'create_content_type' ) );
 		add_action( 'after_setup_theme', array( $this, 'event_scheduler' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_style' ) );
@@ -43,6 +53,18 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 		add_action( 'save_post', array( $this, 'save_meta_data' ), 10, 2 );
 		add_action( 'save_post', array( $this, 'get_plugin_stats' ), 20, 2 );
 		add_action( 'save_post', array( $this, 'get_plugin_support_feed' ), 30, 2 );
+	}
+
+	/**
+	 * Provide an interface to the one and only true instance.
+	 *
+	 * @return Local_WordPress_Plugin_Repo_Foghlaim
+	 */
+	public static function get_instance() {
+		if ( ! self::$instance )
+			self::$instance = new Local_WordPress_Plugin_Repo_Foghlaim();
+
+		return self::$instance;
 	}
 
 	public function create_content_type() {
@@ -284,4 +306,4 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 			update_post_meta( $post_id, '_fog_lpr_support_feed_data', $plugin_forum_data );
 	}
 }
-new Local_WordPress_Plugin_Repo_Foghlaim();
+$local_wordpress_plugin_repo_foghlaim = Local_WordPress_Plugin_Repo_Foghlaim::get_instance();
