@@ -64,38 +64,44 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 		return self::$instance;
 	}
 
+	/**
+	 * Register the content type used by the plugin.
+	 */
 	public function create_content_type() {
-		register_post_type( self::post_type,
-			array(
-			     'labels' => array(
-				     'name' => 'WordPress Plugins',
-				     'singular_name' => 'My Plugin',
-				     'all_items' => 'All of My Plugins',
-				     'add_new_item' => 'Add a Plugin',
-				     'edit_item' => 'Edit a Plugin',
-				     'view_item' => 'View My Plugins',
-				     'new_item' => 'New Plugin',
-				     'search_items' => 'Search My Plugins',
-				     'not_found' => 'No Plugins found',
-				     'not_found_in_trash' => 'No Plugins found in trash',
-			     ),
-			     'description' => 'My WordPress plugins in the plugin repository.',
-			     'public' => true,
-			     'hierarchical' => false,
-			     'supports' => array(
-				     'title',
-				     'editor',
-				     'author',
-				     'thumbnail',
-			     ),
-			     'register_meta_box_cb' => array( $this, 'register_meta_boxes' ),
-			     'has_archive' => true,
-			     'rewrite' => array(
-				     'slug' => 'wordpress/plugins',
-				     'with_front' => false,
-			     ),
-			)
+
+		$content_type_labels = array(
+			'name' => 'WordPress Plugins',
+			'singular_name' => 'My Plugin',
+			'all_items' => 'All of My Plugins',
+			'add_new_item' => 'Add a Plugin',
+			'edit_item' => 'Edit a Plugin',
+			'view_item' => 'View My Plugins',
+			'new_item' => 'New Plugin',
+			'search_items' => 'Search My Plugins',
+			'not_found' => 'No Plugins found',
+			'not_found_in_trash' => 'No Plugins found in trash',
 		);
+
+		$content_type_arguments = array(
+			'labels' => $content_type_labels,
+			'description' => 'My WordPress plugins in the plugin repository.',
+			'public' => true,
+			'hierarchical' => false,
+			'supports' => array(
+				'title',
+				'editor',
+				'author',
+				'thumbnail',
+			),
+			'register_meta_box_cb' => array( $this, 'register_meta_boxes' ),
+			'has_archive' => true,
+			'rewrite' => array(
+				'slug' => 'wordpress/plugins',
+				'with_front' => false,
+			),
+		);
+
+		register_post_type( self::post_type, $content_type_arguments );
 	}
 
 	public function event_scheduler() {
