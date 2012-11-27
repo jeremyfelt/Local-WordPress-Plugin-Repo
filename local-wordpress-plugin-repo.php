@@ -196,13 +196,21 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 		<?php endif;
 	}
 
+	/**
+	 * Display the meta box in each plugin post screen that displays the donation
+	 * code that can be accessed on the front end via the meta key.
+	 *
+	 * @todo - add a getter that will provide this information easily
+	 * 
+	 * @param $post object containing WP_Post data
+	 */
 	function display_plugin_donation_meta_box( $post ) {
 		$current_donation_display = get_post_meta( $post->ID, '_fog_lpr_plugin_donate_code', true );
 		?>
-	<label for="plugin-donate-code">HTML Donate Code:</label><br>
-	<textarea id="plugin-donate-code" name="plugin_donate_code" style="width: 450px; height: 200px;"><?php echo esc_html( $current_donation_display ); ?></textarea>
-	<p class="help">Enter the code that can be used to display the donation code for you plugin.</p>
-	<?php
+		<label for="plugin-donate-code">HTML Donate Code:</label><br>
+		<textarea id="plugin-donate-code" name="plugin_donate_code" style="width: 450px; height: 200px;"><?php echo esc_html( $current_donation_display ); ?></textarea>
+		<p class="help">Enter the code that can be used to display the donation code for you plugin.</p>
+		<?php
 	}
 
 	function display_plugin_support_feed_meta_box( $post ) {
