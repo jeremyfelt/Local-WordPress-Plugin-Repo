@@ -25,6 +25,18 @@ License: GPL2
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/**
+ * Wrapper function to access the getter for plugin download count.
+ *
+ * @param mixed $post_id false or an int containing a Post ID
+ *
+ * @return mixed data containing current download count
+ */
+function lwpr_get_download_count( $post_id = false ) {
+	global $local_wordpress_plugin_repo_foghlaim;
+	return $local_wordpress_plugin_repo_foghlaim->get_download_count( $post_id );
+}
+
 class Local_WordPress_Plugin_Repo_Foghlaim {
 
 	/**
@@ -62,6 +74,23 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 			self::$instance = new Local_WordPress_Plugin_Repo_Foghlaim();
 
 		return self::$instance;
+	}
+
+	/**
+	 * Return the current plugin download count for a specified Post ID
+	 *
+	 * @param mixed $post_id false or an int ID of the requested post
+	 *
+	 * @return mixed data stored in post meta for the download count
+	 */
+	public function get_download_count( $post_id = false ) {
+		if ( ! $post_id )
+			$post_id = get_queried_object_id();
+
+		$post_id = absint( $post_id );
+
+		$plugin_download_count = get_post_meta( $post_id, '_fog_lpr_plugin_downloads', true );
+		return $plugin_download_count;
 	}
 
 	/**
