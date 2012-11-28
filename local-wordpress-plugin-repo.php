@@ -106,6 +106,7 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 		add_action( 'save_post', array( $this, 'save_meta_data' ), 10, 2 );
 		add_action( 'save_post', array( $this, 'get_plugin_stats' ), 20, 2 );
 		add_action( 'save_post', array( $this, 'get_plugin_support_feed' ), 30, 2 );
+		add_filter( 'single_template', array( $this, 'load_template' ) );
 	}
 
 	/**
@@ -118,6 +119,25 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 			self::$instance = new Local_WordPress_Plugin_Repo_Foghlaim();
 
 		return self::$instance;
+	}
+
+	/**
+	 * If a template has not been provided by the theme for individual posts, try
+	 * to offer one of our own. This will be a modified version of the Twenty Twelve
+	 * single template and will offer an idea of how the getter functions can be used
+	 * to display data about the plugin on the front end.
+	 *
+	 * @todo This should be an option to disable for so many reasons
+	 *
+	 * @param $templates string representing the current match for this single template
+	 *
+	 * @return string representing the final match for the single template
+	 */
+	public function load_template( $templates ) {
+		if ( strpos( $templates, 'single-fog_lpr_plugin.php' ) )
+			return $templates;
+		else
+			return WP_PLUGIN_DIR . '/local-wordpress-plugin-repo/templates/single-fog_lpr_plugin.php';
 	}
 
 	/**
