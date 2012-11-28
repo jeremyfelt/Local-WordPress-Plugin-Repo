@@ -50,6 +50,18 @@ function lwpr_get_plugin_version( $post_id = false ) {
 }
 
 /**
+ * Return the current plugin donation code for a specified Post ID
+ *
+ * @param mixed $post_id false or an int ID of the requested post
+ *
+ * @return mixed data stored in post meta for the donation code, most likely HTML
+ */
+function lwpr_get_donate_code( $post_id = false ) {
+	global $local_wordpress_plugin_repo_foghlaim;
+	return $local_wordpress_plugin_repo_foghlaim->get_donate_code( $post_id );
+}
+
+/**
  * Wrapper function to access the getter for support items
  *
  * Support forum data is stored as an array of arrays in post meta. Each array represents
@@ -165,6 +177,23 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 
 		$plugin_version = get_post_meta( $post_id, '_fog_lpr_plugin_version', true );
 		return $plugin_version;
+	}
+
+	/**
+	 * Return the current plugin donation code for a specified Post ID
+	 *
+	 * @param mixed $post_id false or an int ID of the requested post
+	 *
+	 * @return mixed data stored in post meta for the donation code, most likely HTML
+	 */
+	public function get_donate_code( $post_id = false ) {
+		if ( ! $post_id )
+			$post_id = get_queried_object_id();
+
+		$post_id = absint( $post_id );
+
+		$plugin_donation_display = get_post_meta( $post_id, '_fog_lpr_plugin_donate_code', true );
+		return $plugin_donation_display;
 	}
 
 	/**
@@ -303,8 +332,6 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 	 * Display the meta box in each plugin post screen that displays the donation
 	 * code that can be accessed on the front end via the meta key.
 	 *
-	 * @todo - add a getter that will provide this information easily
-	 *
 	 * @param $post object containing WP_Post data
 	 */
 	function display_plugin_donation_meta_box( $post ) {
@@ -319,8 +346,6 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 	/**
 	 * Display the meta box in each plugin post screen that displays the support
 	 * forum data about the plugin.
-	 *
-	 * @todo - add a getter tha will provide this information easily
 	 *
 	 * @param $post object containing WP_Post data
 	 */
