@@ -49,6 +49,26 @@ function lwpr_get_plugin_version( $post_id = false ) {
 	return $local_wordpress_plugin_repo_foghlaim->get_plugin_version( $post_id );
 }
 
+/**
+ * Wrapper function to access the getter for support items
+ *
+ * Support forum data is stored as an array of arrays in post meta. Each array represents
+ * a support thread and follows this format:
+ *
+ * $data['last_date']   = The last date an item was posted in this thread
+ * $data['link']        = The link to the forum thread
+ * $data['last_author'] = The last author to post in the thread
+ * $data['count']       = The total number of messages in the thread.
+ *
+ * @param mixed $post_id false or an int ID of the requested post
+ *
+ * @return mixed data stored in post meta for the forum information (see above comment)
+ */
+function lwpr_get_support_items( $post_id = false ) {
+	global $local_wordpress_plugin_repo_foghlaim;
+	return $local_wordpress_plugin_repo_foghlaim->get_support_items( $post_id );
+}
+
 class Local_WordPress_Plugin_Repo_Foghlaim {
 
 	/**
@@ -103,6 +123,31 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 
 		$plugin_download_count = get_post_meta( $post_id, '_fog_lpr_plugin_downloads', true );
 		return $plugin_download_count;
+	}
+
+	/**
+	 * Return the current plugin support forum data for a specified Post ID.
+	 *
+	 * Support forum data is stored as an array of arrays in post meta. Each array represents
+	 * a support thread and follows this format:
+	 *
+	 * $data['last_date']   = The last date an item was posted in this thread
+	 * $data['link']        = The link to the forum thread
+	 * $data['last_author'] = The last author to post in the thread
+	 * $data['count']       = The total number of messages in the thread.
+	 *
+	 * @param mixed $post_id false or an int ID of the requested post
+	 *
+	 * @return mixed data stored in post meta for the forum information (see above comment)
+	 */
+	public function get_support_items( $post_id = false ) {
+		if ( ! $post_id )
+			$post_id = get_queried_object_id();
+
+		$post_id = absint( $post_id );
+
+		$plugin_forum_data = get_post_meta( $post_id, '_fog_lpr_support_feed_data', true );
+		return $plugin_forum_data;
 	}
 
 	/**
