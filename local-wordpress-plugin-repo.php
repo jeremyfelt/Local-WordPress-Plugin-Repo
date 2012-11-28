@@ -37,6 +37,18 @@ function lwpr_get_download_count( $post_id = false ) {
 	return $local_wordpress_plugin_repo_foghlaim->get_download_count( $post_id );
 }
 
+/**
+ * Wrapper function to access the getter for plugin version.
+ *
+ * @param mixed $post_id false or an int containing a Post Id
+ *
+ * @return mixed data containing current plugin version
+ */
+function lwpr_get_plugin_version( $post_id = false ) {
+	global $local_wordpress_plugin_repo_foghlaim;
+	return $local_wordpress_plugin_repo_foghlaim->get_plugin_version( $post_id );
+}
+
 class Local_WordPress_Plugin_Repo_Foghlaim {
 
 	/**
@@ -91,6 +103,23 @@ class Local_WordPress_Plugin_Repo_Foghlaim {
 
 		$plugin_download_count = get_post_meta( $post_id, '_fog_lpr_plugin_downloads', true );
 		return $plugin_download_count;
+	}
+
+	/**
+	 * Return the current plugin version number for a specified Post ID
+	 *
+	 * @param mixed $post_id false or an int ID of the requested post
+	 *
+	 * @return mixed data stored in post meta for the version number
+	 */
+	public function get_plugin_version( $post_id = false ) {
+		if ( ! $post_id )
+			$post_id = get_queried_object_id();
+
+		$post_id = absint( $post_id );
+
+		$plugin_version = get_post_meta( $post_id, '_fog_lpr_plugin_version', true );
+		return $plugin_version;
 	}
 
 	/**
